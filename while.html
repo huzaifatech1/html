@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANFRUIT | Premium Ecosystem 2026</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --card: rgba(255, 255, 255, 0.8);
+            --text: #0f172a;
+            --muted: #64748b;
+            --accent: #10b981;
+            --accent-glow: rgba(16, 185, 129, 0.3);
+            --border: rgba(0, 0, 0, 0.08);
+            --nav-bg: rgba(255, 255, 255, 0.7);
+            --grad: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+        }
+
+        [data-theme="dark"] {
+            --bg: #020617;
+            --card: rgba(15, 23, 42, 0.7);
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --accent: #34d399;
+            --accent-glow: rgba(52, 211, 153, 0.2);
+            --border: rgba(255, 255, 255, 0.08);
+            --nav-bg: rgba(2, 6, 23, 0.8);
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .navbar-brand { font-family: 'Space Grotesk', sans-serif; font-weight: 700; }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 10px; }
+
+        /* GLASSMORPHISM */
+        .glass {
+            background: var(--card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            transition: 0.3s ease;
+        }
+
+        .navbar {
+            background: var(--nav-bg) !important;
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border);
+            padding: 15px 0;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            padding: 160px 0 80px;
+            background: radial-gradient(circle at top right, var(--accent-glow), transparent);
+            text-align: center;
+        }
+
+        .hero-badge {
+            background: var(--accent-glow);
+            color: var(--accent);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        /* PRODUCT CARDS */
+        .product-card {
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .img-wrapper {
+            position: relative;
+            height: 240px;
+            overflow: hidden;
+            border-radius: 18px;
+            margin: 10px;
+        }
+
+        .img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.6s;
+        }
+
+        .product-card:hover .img-wrapper img { transform: scale(1.1); }
+
+        .price-tag {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--grad);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* BUTTONS */
+        .btn-primary-custom {
+            background: var(--grad);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 10px 24px;
+            border-radius: 14px;
+            transition: 0.3s;
+        }
+
+        .btn-primary-custom:hover { opacity: 0.9; transform: scale(1.05); }
+
+        /* THEME TOGGLE */
+        .theme-switch {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 50%;
+            background: var(--border);
+        }
+
+        /* PAYMENT PICKER */
+        .pay-option {
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 15px;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .pay-option:hover { border-color: var(--accent); }
+        .pay-option.active {
+            background: var(--accent-glow);
+            border-color: var(--accent);
+        }
+
+        #payDetailsBox {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 16px;
+            background: rgba(0,0,0,0.05);
+        }
+
+        /* DASHBOARD */
+        #merchantDashboard { display: none; padding-top: 120px; }
+        .stat-card { padding: 30px; text-align: center; }
+        .stat-val { font-size: 2.5rem; font-weight: 800; display: block; }
+
+        /* MESSAGING & REVIEWS */
+        .review-scroll { max-height: 300px; overflow-y: auto; padding-right: 10px; }
+        .chat-bubble {
+            background: var(--border);
+            padding: 12px 18px;
+            border-radius: 18px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        /* SPLASH */
+        #splash {
+            position: fixed; inset: 0; background: #000; z-index: 10000;
+            display: flex; align-items: center; justify-content: center;
+            transition: 0.8s;
+        }
+
+        /* UTILS */
+        .badge-status { padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; }
+        .bg-success-soft { background: rgba(16, 185, 129, 0.1); color: var(--accent); }
+    </style>
+</head>
+<body data-theme="light">
+
+<div id="splash">
+    <div class="text-center">
+        <h1 class="text-white display-1 mb-0">AN<span style="color:var(--accent)">FRUIT</span></h1>
+        <div class="spinner-grow text-success mt-3" role="status"></div>
+    </div>
+</div>
+
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <a class="navbar-brand fs-2" href="#" onclick="showPage('store')">AN<span style="color:var(--accent)">FRUIT</span></a>
+        
+        <div class="d-flex align-items-center gap-3">
+            <div class="d-none d-md-flex gap-4 me-4">
+                <a href="#products" class="nav-link fw-semibold">Boutique</a>
+                <a href="#reviews" class="nav-link fw-semibold">Community</a>
+                <a href="#" class="nav-link fw-semibold text-primary" onclick="showPage('merchant')">Merchant Hub</a>
+            </div>
+
+            <div class="theme-switch" onclick="toggleTheme()">
+                <i id="theme-icon" class="bi bi-moon-stars-fill"></i>
+            </div>
+
+            <div class="position-relative" style="cursor: pointer;" onclick="scrollToId('cartSection')">
+                <i class="bi bi-bag-heart fs-3"></i>
+                <span id="cartCount" class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle">0</span>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div id="storeView">
+    <section class="hero">
+        <div class="container">
+            <span class="hero-badge">Curated Collection 2026</span>
+            <h1 class="display-2 mb-3">Elevate Your <span style="color:var(--accent)">Digital Lifestyle.</span></h1>
+            <p class="text-muted lead mx-auto" style="max-width: 600px;">Experience the next generation of commerce with our bio-secure, high-fidelity asset marketplace.</p>
+        </div>
+    </section>
+
+    <div class="container mb-5" id="products">
+        <div class="d-flex justify-content-between align-items-end mb-5">
+            <div>
+                <h2 class="mb-0">Featured Assets</h2>
+                <p class="text-muted">Direct from our premium verified merchants.</p>
+            </div>
+            <div class="col-md-3">
+                <input type="text" id="search" class="form-control rounded-pill border-0 glass px-4" placeholder="Filter assets..." onkeyup="searchAssets()">
+            </div>
+        </div>
+
+        <div class="row g-4" id="mainGrid">
+            <div class="col-md-4 product-item">
+                <div class="glass product-card">
+                    <div class="img-wrapper">
+                        <img src="https://cdn.pixabay.com/photo/2025/09/30/15/56/duck-9864734_1280.jpg" alt="Core">
+                    </div>
+                    <div class="p-4 pt-0">
+                        <h4 class="fw-bold asset-name">DUCKY BHAI X1</h4>
+                        <p class="text-muted small">PROCESSOR OF DUCKY BHAI THANDI CHUSEE</p>
+                        <div class="d-flex justify-content-between align-items-center mt-auto">
+                            <span class="price-tag">$24</span>
+                            <button class="btn btn-primary-custom" onclick="addToCart('DUCKY BHAI', 24)">Add to Bag</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 product-item">
+                <div class="glass product-card">
+                    <div class="img-wrapper">
+                        <img src="https://cdn.pixabay.com/photo/2018/04/06/23/43/poultry-3297369_960_720.jpg" alt="Synth">
+                    </div>
+                    <div class="p-4 pt-0">
+                        <h4 class="fw-bold asset-name">CHICKEN</h4>
+                        <p class="text-muted small">FRESH CHICKEN</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="price-tag">$8.5</span>
+                            <button class="btn btn-primary-custom" onclick="addToCar('CHICKEN', 8.5)">Add to Bag</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 product-item">
+                <div class="glass product-card">
+                    <div class="img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1633177317976-3f9bc45e1d1d?auto=format&fit=crop&w=800&q=80" alt="Optic">
+                    </div>
+                    <div class="p-4 pt-0">
+                        <h4 class="fw-bold asset-name">Holo-Lens Pro</h4>
+                        <p class="text-muted small">Augmented reality optics with 12K focal depth.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="price-tag">$1,200</span>
+                            <button class="btn btn-primary-custom" onclick="addToCart('Holo-Lens Pro', 1200)">Add to Bag</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 product-item">
+                <div class="glass product-card">
+                    <div class="img-wrapper">
+                        <img src="https://cdn.pixabay.com/photo/2025/10/07/10/59/parrot-9878922_960_720.jpg" alt="Orb">
+                    </div>
+                    <div class="p-4 pt-0">
+                        <h4 class="fw-bold asset-name">PARROT</h4>
+                        <p class="text-muted small">CANT RAN AWAY</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="price-tag">$450</span>
+                            <button class="btn btn-primary-custom" onclick="addToCart('Static Orb Hub', 450)">Add to Bag</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="col-md-4 product-item">
+                <div class="glass product-card">
+                    <div class="img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80" alt="Drone">
+                    </div>
+                    <div class="p-4 pt-0">
+                        <h4 class="fw-bold asset-name">Nano-Drone X</h4>
+                        <p class="text-muted small">Silent 8K recording drone for aerial content.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="price-tag">$1,800</span>
+                            <button class="btn btn-primary-custom" onclick="addToCart('Nano-Drone X', 1800)">Add to Bag</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="col-md-4 product-item">
+                <div class="glass product-card">
+                    <div class="img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&w=800&q=80" alt="Crypt">
+                    </div>
+                    <div class="p-4 pt-0">
+                        <h4 class="fw-bold asset-name">Vault Key 01</h4>
+                        <p class="text-muted small">Physical hardware key for cold storage security.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="price-tag">$120</span>
+                            <button class="btn btn-primary-custom" onclick="addToCart('Vault Key 01', 120)">Add to Bag</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 product-item">
+                <div class="glass product-card">
+                    <div class="img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80" alt="Watch">
+                    </div>
+                    <div class="p-4 pt-0">
+                        <h4 class="fw-bold asset-name">Bio-Watch Series</h4>
+                        <p class="text-muted small">Health monitoring with integrated blood analysis.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="price-tag">$599</span>
+                            <button class="btn btn-primary-custom" onclick="addToCart('Bio-Watch Series', 599)">Add to Bag</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <div class="col-md-4 product-item">
+                <div class="glass product-card">
+                    <div class="img-wrapper">
+                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80" alt="Audio">
+                    </div>
+                    <div class="p-4 pt-0">
+                        <h4 class="fw-bold asset-name">Sonic Isolation Pro</h4>
+                        <p class="text-muted small">Noise-cancelling headsets for deep focus.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="price-tag">$350</span>
+                            <button class="btn btn-primary-custom" onclick="addToCart('Sonic Isolation Pro', 350)">Add to Bag</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-5" id="reviews">
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="glass p-4 h-100">
+                    <h3 class="mb-4">Ecosystem Reviews</h3>
+                    <div class="review-scroll mb-4" id="reviewWall">
+                        <div class="chat-bubble">
+                            <strong>@cyber_walker:</strong> The Neural Core arrived in 2 hours via drone. Incredible.
+                        </div>
+                        <div class="chat-bubble">
+                            <strong>@neo_zen:</strong> Dark mode looks stunning on this site. Top tier UI.
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="reviewInput" class="form-control glass border-0" placeholder="Join the conversation...">
+                        <button class="btn btn-primary-custom" onclick="postReview()">Send</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="glass p-4 h-100">
+                    <h3 class="mb-4">Merchant Support</h3>
+                    <p class="text-muted small">Send an encrypted message directly to our concierge team.</p>
+                    <textarea id="conciergeMsg" class="form-control glass border-0 mb-3" rows="4" placeholder="How can we assist your acquisition?"></textarea>
+                    <button class="btn btn-dark w-100 rounded-pill py-3" onclick="sendToMerchant()">Send Encrypted Message</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-5 mb-5" id="cartSection">
+        <div class="glass p-5">
+            <h2 class="mb-4">Your Acquisitions</h2>
+            <div id="cartBody" class="mb-4 text-muted">Bag is currently empty.</div>
+            <div class="d-flex justify-content-between align-items-center border-top pt-4">
+                <div>
+                    <span class="text-muted d-block">Grand Total</span>
+                    <h1 class="mb-0 fw-800">$<span id="cartTotal">0</span></h1>
+                </div>
+                <button class="btn btn-primary-custom btn-lg px-5 py-3" onclick="initiateCheckout()">Secure Checkout</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="merchantDashboard">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-5">
+            <div>
+                <h1 class="display-4">Console_<span style="color:var(--accent)">Admin</span></h1>
+                <p class="text-muted">Real-time marketplace oversight.</p>
+            </div>
+            <button class="btn btn-outline-secondary rounded-pill px-4" onclick="showPage('store')">Return to Store</button>
+        </div>
+
+        <div class="row g-4 mb-5 text-center">
+            <div class="col-md-3"><div class="glass stat-card"><small class="text-muted">TOTAL SALES</small><span class="stat-val" id="m-sales">$84,200</span></div></div>
+            <div class="col-md-3"><div class="glass stat-card"><small class="text-muted">ACTIVE ORDERS</small><span class="stat-val" id="m-orders">12</span></div></div>
+            <div class="col-md-3"><div class="glass stat-card"><small class="text-muted">LIVE USERS</small><span class="stat-val">42</span></div></div>
+            <div class="col-md-3"><div class="glass stat-card"><small class="text-muted">RELIABILITY</small><span class="stat-val text-success">99%</span></div></div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="glass p-4 h-100">
+                    <h4 class="mb-4">Inventory Control</h4>
+                    <div class="table-responsive">
+                        <table class="table table-borderless align-middle text-start" style="color: inherit;">
+                            <thead class="text-muted small text-uppercase">
+                                <tr><th>Asset</th><th>Price</th><th>Stock</th><th>Status</th></tr>
+                            </thead>
+                            <tbody id="m-inventory">
+                                <tr><td>Neural Core X1</td><td>$2,400</td><td>14</td><td><span class="badge-status bg-success-soft">ACTIVE</span></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <hr class="my-4 opacity-10">
+                    <h5 class="mb-3">Deploy New Asset</h5>
+                    <div class="row g-3">
+                        <div class="col-md-4"><input type="text" id="p-name" class="form-control glass border-0" placeholder="Asset Name"></div>
+                        <div class="col-md-3"><input type="number" id="p-price" class="form-control glass border-0" placeholder="Price"></div>
+                        <div class="col-md-3"><input type="text" id="p-img" class="form-control glass border-0" placeholder="Image URL"></div>
+                        <div class="col-md-2"><button class="btn btn-primary-custom w-100" onclick="merchantAddProduct()">Deploy</button></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="glass p-4 h-100">
+                    <h4 class="mb-4">System Alerts</h4>
+                    <div id="m-alerts">
+                        <div class="chat-bubble border-start border-primary border-4">Server optimized for 2026 protocols.</div>
+                        <div class="chat-bubble border-start border-success border-4">New merchant verification pending.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="checkoutModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content glass border-0 p-4">
+            <h3 class="fw-800 mb-4">Finalize Acquisition</h3>
+            
+            <label class="small fw-bold mb-2">Delivery Coordinate</label>
+            <input type="text" id="coord" class="form-control glass border-0 mb-4" placeholder="Hex Code or Street Address">
+
+            <label class="small fw-bold mb-3">Gateway Protocol</label>
+            <div class="row g-2 mb-4">
+                <div class="col-4">
+                    <div class="pay-option" id="p-card" onclick="setPayment('card')">
+                        <i class="bi bi-credit-card fs-4"></i><br><small>Credit</small>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="pay-option" id="p-cod" onclick="setPayment('cod')">
+                        <i class="bi bi-truck fs-4"></i><br><small>Drones</small>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="pay-option" id="p-crypto" onclick="setPayment('crypto')">
+                        <i class="bi bi-currency-bitcoin fs-4"></i><br><small>Crypto</small>
+                    </div>
+                </div>
+            </div>
+
+            <div id="payDetailsBox"></div>
+
+            <button class="btn btn-primary-custom btn-lg w-100 mt-4 py-3" onclick="confirmOrder()">Authorize Transaction</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let cart = [];
+    let activePay = null;
+
+    // PAGE LOADER
+    window.onload = () => {
+        setTimeout(() => {
+            document.getElementById('splash').style.opacity = '0';
+            setTimeout(() => document.getElementById('splash').style.display = 'none', 800);
+        }, 2000);
+    };
+
+    // THEME ENGINE
+    function toggleTheme() {
+        const body = document.body;
+        const icon = document.getElementById('theme-icon');
+        const current = body.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        
+        body.setAttribute('data-theme', next);
+        icon.className = next === 'dark' ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
+    }
+
+    // VIEW ROUTING
+    function showPage(page) {
+        document.getElementById('storeView').style.display = page === 'store' ? 'block' : 'none';
+        document.getElementById('merchantDashboard').style.display = page === 'merchant' ? 'block' : 'none';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // CART LOGIC
+    function addToCart(name, price) {
+        let exists = cart.find(i => i.name === name);
+        if(exists) exists.qty++;
+        else cart.push({name, price, qty: 1});
+        renderCart();
+    }
+
+    function renderCart() {
+        const body = document.getElementById('cartBody');
+        const count = document.getElementById('cartCount');
+        const total = document.getElementById('cartTotal');
+        
+        if(cart.length === 0) {
+            body.innerHTML = "Bag is currently empty.";
+            count.innerText = "0";
+            total.innerText = "0";
+            return;
+        }
+
+        let sum = 0, items = 0;
+        body.innerHTML = cart.map(i => {
+            sum += (i.price * i.qty);
+            items += i.qty;
+            return <div class="d-flex justify-content-between mb-2">
+                        <span>${i.name} <strong>x${i.qty}</strong></span>
+                        <span>$${i.price * i.qty}</span>
+                    </div>;
+        }).join('');
+        
+        count.innerText = items;
+        total.innerText = sum.toLocaleString();
+    }
+
+    // PAYMENT CONTROLLER
+    function setPayment(mode) {
+        activePay = mode;
+        const box = document.getElementById('payDetailsBox');
+        document.querySelectorAll('.pay-option').forEach(el => el.classList.remove('active'));
+        document.getElementById('p-' + mode).classList.add('active');
+        
+        box.style.display = 'block';
+        if(mode === 'card') {
+            box.innerHTML = <input type="text" class="form-control glass border-0 mb-2" placeholder="Card Number">
+                             <div class="row g-2"><div class="col-6"><input type="text" class="form-control glass border-0" placeholder="MM/YY"></div>
+                             <div class="col-6"><input type="text" class="form-control glass border-0" placeholder="CVC"></div></div>;
+        } else if(mode === 'crypto') {
+            box.innerHTML = <div class="small text-muted mb-2">Send precisely $<span id="t-disp">${document.getElementById('cartTotal').innerText}</span> to:</div>
+                             <code class="text-break">0xANF_PREMIUM_VAULT_2026_PRO</code>;
+        } else {
+            box.innerHTML = <div class="small">Our logistics drone will collect currency upon biometric verification.</div>;
+        }
+    }
+
+    function initiateCheckout() {
+        if(cart.length === 0) return alert("Select an asset first.");
+        new bootstrap.Modal(document.getElementById('checkoutModal')).show();
+    }
+
+    function confirmOrder() {
+        if(!activePay || !document.getElementById('coord').value) return alert("Please fill all fields.");
+        
+        const orderId = "#ANF-" + Math.floor(1000 + Math.random() * 9000);
+        
+        // Update Merchant Dash (Simulated)
+        const alerts = document.getElementById('m-alerts');
+        alerts.innerHTML = <div class="chat-bubble border-start border-warning border-4">
+                                <strong>Order ${orderId}</strong> placed for $${document.getElementById('cartTotal').innerText}
+                            </div> + alerts.innerHTML;
+
+        alert("Transaction Authorized! Order ID: " + orderId);
+        cart = [];
+        renderCart();
+        bootstrap.Modal.getInstance(document.getElementById('checkoutModal')).hide();
+    }
+
+    // MERCHANT ACTIONS
+    function merchantAddProduct() {
+        const n = document.getElementById('p-name').value;
+        const p = document.getElementById('p-price').value;
+        const img = document.getElementById('p-img').value || 'https://via.placeholder.com/300';
+        if(!n || !p) return;
+
+        // Add to store
+        const grid = document.getElementById('mainGrid');
+        grid.innerHTML += 
+            <div class="col-md-4 product-item">
+                <div class="glass product-card">
+                    <div class="img-wrapper"><img src="${img}"></div>
+                    <div class="p-4 pt-0">
+                        <h4 class="fw-bold asset-name">${n}</h4>
+                        <p class="text-muted small">Merchant-verified dynamic listing.</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="price-tag">$${parseInt(p).toLocaleString()}</span>
+                            <button class="btn btn-primary-custom" onclick="addToCart('${n}', ${p})">Add to Bag</button>
+                        </div>
+                    </div>
+                </div>
+            </div>;
+
+        // Add to table
+        const table = document.getElementById('m-inventory');
+        table.innerHTML += <tr><td>${n}</td><td>$${parseInt(p).toLocaleString()}</td><td>100</td><td><span class="badge-status bg-success-soft">ACTIVE</span></td></tr>;
+        
+        alert("Asset Deployed Successfully.");
+    }
+
+    // REVIEWS & SUPPORT
+    function postReview() {
+        const inp = document.getElementById('reviewInput');
+        if(!inp.value) return;
+        const wall = document.getElementById('reviewWall');
+        wall.innerHTML += <div class="chat-bubble"><strong>@Guest:</strong> ${inp.value}</div>;
+        inp.value = "";
+        wall.scrollTop = wall.scrollHeight;
+    }
+
+    function sendToMerchant() {
+        const msg = document.getElementById('conciergeMsg');
+        if(!msg.value) return;
+        alert("Message Encrypted & Sent to Merchant Command.");
+        msg.value = "";
+    }
+
+    function searchAssets() {
+        const q = document.getElementById('search').value.toLowerCase();
+        document.querySelectorAll('.product-item').forEach(item => {
+            const name = item.querySelector('.asset-name').innerText.toLowerCase();
+            item.style.display = name.includes(q) ? 'block' : 'none';
+        });
+    }
+
+    function scrollToId(id) {
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
+</body>
+</html>
